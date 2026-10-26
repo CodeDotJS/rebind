@@ -1,0 +1,36 @@
+---
+description: Go quality, Git safety, testing, and maintainability for git-rebind
+alwaysApply: true
+---
+
+# git-rebind
+
+This repository is a small Git metadata CLI. Do not turn it into a Git framework.
+
+## Go
+
+- Stay in `package main` and the standard library.
+- Return errors that name the action and the cause (`back up .git: %w`).
+- Parse flags with `flag`. Do not add a CLI framework or new dependencies.
+
+## Git safety
+
+- Invoke Git with `os/exec` argument vectors. Never start a shell.
+- Never stage, commit, push, fetch, pull, merge, rebase, checkout, reset, or clean.
+- Never write project files outside `.git`, `.git.rebind-old`, and `.git.rebind-current`.
+- Store backups only in the data directory, outside the project.
+- Refuse bare repositories, linked worktrees, extra worktrees, and submodules.
+- `--undo` must stop when commits or staged changes exist unless `--force` was passed or the user confirmed at a terminal.
+
+```go
+// BAD: a shell interpolates the remote URL.
+exec.Command("sh", "-c", "git remote add origin "+url)
+
+// GOOD: Git receives the URL as one argument.
+exec.CommandContext(ctx, gitBin, "remote", "add", "origin", "--", url)
+```
+
+## Tests
+
+- Build fixtures with `t.TempDir()` and set `GIT_REBIND_DATA_DIR` there.
+- Never point Git or git-rebind at the module root.
