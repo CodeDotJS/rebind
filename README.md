@@ -6,9 +6,11 @@ It does not stage, commit, push, fetch, merge, or checkout. It also does not loo
 
 ## Install
 
-From a clone of this repository:
+Clone the repository:
 
 ```bash
+git clone git@github.com:CodeDotJS/rebind.git
+cd rebind
 go install .
 ```
 
@@ -30,6 +32,31 @@ git rebind <url> [--keep-history] [--dry-run]
 git rebind --undo [--dry-run] [--force]
 git rebind --status
 git rebind --version
+```
+
+`git rebind -h` prints:
+
+```text
+git-rebind — point an existing checkout at a different Git repository
+
+Usage:
+  git rebind <url> [--keep-history] [--dry-run]
+  git rebind --undo [--dry-run] [--force]
+  git rebind --status
+  git rebind --version
+
+git-rebind is invoked as "git rebind" when the binary is on PATH.
+
+Options:
+  --keep-history   Change origin and keep the current Git history
+  --dry-run        Print the plan without writing
+  --undo           Restore Git metadata from the newest backup
+  --force          Allow --undo to replace commits or staged changes
+  --status         Show the repository, origin, and backups
+  --version        Print the version
+
+The command never stages, commits, pushes, fetches, or edits project files.
+Backups are stored outside the project. See the README for recovery.
 ```
 
 | Command | Effect |
@@ -125,5 +152,3 @@ Run the full local check with:
 ```bash
 make check
 ```
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for the safety rules and test setup.
